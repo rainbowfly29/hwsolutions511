@@ -49,6 +49,19 @@ example : forall_sufficiently_large n : ℕ, 2 ^ n ≥ n ^ 2 := by
 
 /- 2 points -/
 -- 4(c)
+theorem problem4c {a : ℝ} (ha : -1 ≤ a) (n : ℕ) : (1 + a) ^ n ≥ 1 + n * a := by
+  simple_induction n with x IH
+  . simp
+  . have ha : 0 ≤ 1+a := by addarith [ha]
+    have h1 : (1 + a)^(x+1) ≥ 1 + (x+1)*a := by 
+      calc
+        (1+a)^(x+1)
+        = (1+a) * (1+a)^x := by ring
+        _ ≥ (1 + a) * (1 + x*a) := by rel[IH]
+        _ = 1 + a + x*a + x*a^2 := by ring
+        _ = 1 + a*(1+x) + x*a^2 := by ring
+        _ ≥ 1 + a*(1+x) := by extra
+    apply h1
 
 /- 3 points -/
 -- 4 (d)
