@@ -25,7 +25,6 @@ example {a b d : ℤ} (h : a ≡ b [ZMOD d]) (n : ℕ) : a ^ n ≡ b ^ n [ZMOD d
 
 
 /- 3 points -/
-
 -- 4(b)
 example : forall_sufficiently_large n : ℕ, 2 ^ n ≥ n ^ 2 := by
   dsimp
@@ -70,7 +69,6 @@ theorem problem4d : forall_sufficiently_large n : ℕ, (3:ℤ) ^ n ≥ 2 ^ n + 1
 
 
 /- 5 points -/
--- 5Q 
 def foo : ℕ → ℕ
   | 0     => 1
   | n + 1 => foo (n) + 2 * n + 3
