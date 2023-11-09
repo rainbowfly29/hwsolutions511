@@ -80,7 +80,15 @@ def q : ℕ → ℤ
 
 /- 3 points -/
 theorem problem5a (n : ℕ) : q n = (n:ℤ) ^ 3 + 1 := by
-  sorry
+  two_step_induction n with x hx hy
+  . simp
+  . simp
+  calc
+    q (x+1+1) = 2*q (x+1) - q x + 6*x + 6 := by rw [q]
+    _ = 2*q (x+1) - (↑x ^ 3 + 1) + 6*x + 6 := by rw [hx]
+    _ = 2*((↑x + 1) ^ 3 + 1) - (↑x ^ 3 + 1) + 6*x + 6 := by rw [hy]
+    _ = (↑x + 1 + 1) ^ 3 + 1 := by ring
+
 
 def r : ℕ → ℤ
   | 0 => 2
@@ -89,8 +97,33 @@ def r : ℕ → ℤ
 
 /- 3 points -/
 theorem problem5b : forall_sufficiently_large n : ℕ, r n ≥ 2 ^ n := by
-  sorry
+  simp [r]
+  use 7
+  intro n hn
+  two_step_induction_from_starting_point n, hn with x hx h1 h2
+  . simp [r]
+  . simp [r]
+  . calc
+    r (x+1+1) = 2 * r (x + 1) + r x := by rw [r]
+    _ ≥ 2 * (2 ^ (x + 1)) + 2 ^ x := by rel [h1, h2]
+    _ = 2 ^ (x+1+1) + 2^x := by ring
+    _ ≥  2 ^ (x+1+1) := by extra
+
 
 /- 3 points -/
 theorem problem5c (n : ℕ) (hn : 0 < n) : ∃ a x, Odd x ∧ n = 2 ^ a * x := by
-  sorry
+  obtain hn | hn := Nat.even_or_odd n
+  . obtain ⟨c,hc⟩ := hn
+    rw [hc] at hn
+    cancel 2 at hn
+    have hz : ∃ a x, Odd x ∧ c = 2 ^ a * x := problem5c c hn
+    obtain ⟨a', y', hy', ha⟩ := hz
+    use a'+1, y'
+    use hy'
+    calc
+      n = 2*c := by rw [hc]
+      _ = 2 * (2^a'*y') := by rw [ha]
+      _ = 2^(a'+1)*y' := by ring
+  . use 0, n
+    simp
+    apply hn
